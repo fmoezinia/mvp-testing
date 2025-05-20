@@ -10,6 +10,10 @@
         <input type="file" id="document-input" accept="application/pdf" required />
         <button type="submit">Upload and Process</button>
     </form>
+    <p>
+        <button type="button" id="load-sample">Load Sample Visa Document</button>
+        or <a href="sample_visa.pdf" download>download the sample</a> and drag it onto the file input.
+    </p>
     <pre id="result"></pre>
 
     <script>
@@ -27,6 +31,15 @@
         });
         const data = await response.json();
         document.getElementById('result').textContent = data.summary || data.error;
+    });
+
+    document.getElementById('load-sample').addEventListener('click', async () => {
+        const response = await fetch('sample_visa.pdf');
+        const blob = await response.blob();
+        const file = new File([blob], 'sample_visa.pdf', { type: 'application/pdf' });
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        document.getElementById('document-input').files = dt.files;
     });
     </script>
 </body>
